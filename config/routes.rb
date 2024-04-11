@@ -2,6 +2,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     get 'features', to: 'features#index'
+    resources :features do
+      resources :comments, only: [:create]
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
