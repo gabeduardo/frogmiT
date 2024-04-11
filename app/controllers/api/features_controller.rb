@@ -3,7 +3,9 @@ class Api::FeaturesController < ApplicationController
         earthquakes = Feature.all
     
         # Filtro por mag_type (si se proporciona)
-        mag_types = params[:mag_type] ? params[:mag_type] : []
+        # mag_types = params[:mag_type] ? params[:mag_type] : []
+        # para poder verificar si el formato de la url usa filters o directamente mag_types
+        mag_types= params.dig(:filters, :mag_type) || params[:mag_type] || []
         earthquakes = earthquakes.where(mag_type: mag_types) if mag_types.present?
     
     
