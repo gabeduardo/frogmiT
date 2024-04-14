@@ -8,11 +8,20 @@ class Api::FeaturesController < ApplicationController
         mag_types= params.dig(:filters, :mag_type) || params[:mag_type] || []
         earthquakes = earthquakes.where(mag_type: mag_types) if mag_types.present?
     
-    
-    
+          # Paginación 
+        page = params.dig(:filters, :page) || params[:page] || 1
+        per_page = params.dig(:filters, :per_page) || params[:per_page] || 10
+        per_page = [per_page.to_i,1000].min
+        @paginated_earthquakes = earthquakes.page(page).per(per_page)
+
         # Serializar los datos para que asi los pueda devolver en el formato especificado
         render json: {
-          data: earthquakes.map { |earthquake| serialize_earthquake(earthquake) },
+          data: @paginated_earthquakes.map { |earthquake| serialize_earthquake(earthquake) },
+          pagination: {
+            current_page: @paginated_earthquakes.current_page,
+            total: @paginated_earthquakes.total_pages,
+            per_page: per_page
+          }
          
         }
       end

@@ -69,3 +69,5 @@ end
 
 
 gem 'httparty'
+
+gem 'kaminari', '~> 0.17.0'
